@@ -1,0 +1,39 @@
+<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cs" #>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using SeedEquityWeb.Models;
+
+namespace <#= Model.Namespace#>.Services.<#=Model.Service#>
+{ 
+	public partial interface I<#=Model.Service#>Service
+	{
+		<#=Model.Method#>Result <#=Model.Method#>(<#=Model.Method#>Request req); 
+	}
+
+	public partial class <#=Model.Service#>Service
+	{
+		public <#= Model.Method#>Result <#= Model.Method#>(<#= Model.Method#>Request req)
+		{
+			return <#= Model.Method#>Result.Success( res => { } );
+		}
+	}
+
+    public class <#= Model.Method#>Request
+    {
+		<# if (Model.Key != String.Empty) { #>
+		public int <#= Model.Key#> {get;set;}
+		<# } #>
+    }
+
+
+    public class <#= Model.Method#>Result : Result<<#= Model.Method#>Result>
+    {
+		<#if (Model.ModelName != ""){#>
+		public <#=Model.ModelName#> <#=Model.ModelName#> {get;set;}
+		<# } #>
+    }
+
+}

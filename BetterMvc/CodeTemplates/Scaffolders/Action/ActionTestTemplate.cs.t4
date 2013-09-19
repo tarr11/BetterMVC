@@ -1,0 +1,32 @@
+﻿<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cs" #>
+<#@ assembly name="EnvDte" #>
+<#@ assembly name="System.Data.Entity" #>
+<#@ assembly name="System.Data.Linq" #>
+<#@ import namespace="System.Linq" #>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using SeedEquityWeb.Controllers.<#=Model.Controller#>;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using SeedEquityWeb.Services.SeedEquity;
+
+namespace SeedEquityWeb.Test.Controllers.<#=Model.Controller#> 
+{ 
+	[TestClass]
+    public partial class <#=Model.Controller#>ControllerTests
+    {
+		[TestMethod]
+		public void <#=Model.Action#>Test()
+		{
+            var mockSvc = Mock.Of<ISeedEquityService>();
+			<#=Model.Controller#>Controller controller = new <#=Model.Controller#>Controller(mockSvc);
+			var result = controller.<#=Model.Action#>();
+		}
+
+	}
+
+}

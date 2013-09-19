@@ -1,0 +1,33 @@
+﻿<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cs" #>
+<#@ assembly name="EnvDte" #>
+<#@ assembly name="System.Data.Entity" #>
+<#@ assembly name="System.Data.Linq" #>
+<#@ import namespace="System.Linq" #>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using SeedEquityWeb.Services.<#=Model.Service#>;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using SeedEquityWeb.Test.Services.<#=Model.Service#>;
+
+namespace SeedEquityWeb.Test.Services.<#=Model.Service#> 
+{ 
+    [TestClass]
+    public class <#=Model.Method#>Tests 
+    {
+        [TestMethod, TestCategory(Categories.Integration)]
+		public void Test<#=Model.Method#>()
+		{
+             var svc = <#=Model.Service#>Tests.GetService();
+             var request = new <#=Model.Method#>Request{};
+             var result = svc.<#=Model.Method#>(request); 
+             Assert.IsTrue(result.IsSuccessful);
+		}
+
+	}
+
+}

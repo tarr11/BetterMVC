@@ -1,0 +1,58 @@
+<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cs" #>
+<#@ assembly name="EnvDte" #>
+<#@ assembly name="System.Data.Entity" #>
+<#@ assembly name="System.Data.Linq" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#
+	EnvDTE.CodeType resultModel = null;  
+	EnvDTE.CodeType dataModel = null; 
+	IEnumerable<EnvDTE.CodeProperty> resultMembers = null;
+	
+	if (Model.DataModel != null)
+	{
+		resultModel = (EnvDTE.CodeType) Model.DataModel;
+		dataModel = (EnvDTE.CodeType) Model.resultModel;
+		resultMembers = resultModel.VisibleMembers().OfType<EnvDTE.CodeProperty>().Where(s=>s.Name != "IsSuccessful");
+	}
+#>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+<# if (resultModel != null){#>
+using <#=resultModel.Namespace.FullName#>;
+<#}#>
+
+namespace SeedEquityWeb.Controllers.<#=Model.Controller#> 
+{ 
+    public partial class <#=Model.Controller#>Controller : ControllerBase
+    {
+		public ActionResult <#=Model.Action#>()
+		{
+			return View();
+		}
+
+		<#if (resultModel != null){#>
+		public static <#=Model.Action#>ViewModel  To<#=Model.Action#>ViewModel(<#=resultModel.Name#> result)
+		{
+			var vm =  new <#=Model.Action#>ViewModel();
+			<#foreach(var member in resultMembers){#>
+			vm.<#=member.Name#> = result.<#=member.Name#>;
+			<#}#>
+			return vm;
+		} 
+		<#}#>
+	}
+
+	<#if (resultModel != null){#>
+	public class <#=Model.Action#>ViewModel
+	{
+		<#foreach(var member in resultMembers){#>
+			public <#=member.Type.AsFullName#> <#=member.Name#> {get;set;}
+		<#}#>
+	}
+	<#}#>
+}
