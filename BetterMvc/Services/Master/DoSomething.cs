@@ -14,17 +14,19 @@ namespace BetterMvc.Services.Master
     {
         public DoSomethingResult DoSomething(DoSomethingRequest request)
         {
-            return new DoSomethingResult { };
+            return new DoSomethingResult { SomeData = "foo" };
         }
     }
 
     public class DoSomethingResult : Result
     {
+        public string SomeData { get; set; }
 
     }
 
     public class DoSomethingRequest : Request
     {
+        public int Id { get; set; }
 
     }
 }
